@@ -10,8 +10,8 @@ async function getAll() {
 
 async function listContacts() {
     try {
-        const data = await getAll()
-        console.table(data)
+        const contacts = await getAll()
+        console.table(contacts)
     } catch (error) {
         console.error(error)
     }
@@ -30,9 +30,10 @@ async function getContactById(contactId) {
 async function removeContact(contactId) {
     try {
         const contacts = await getAll()
-        const newData = JSON.stringify(contacts.filter(contact => contact.id !== String(contactId)))
-        await fs.writeFile(contactsPath, newData)
-        console.log(newData)
+        const newContactList = JSON.stringify(contacts.filter(contact => contact.id !== contactId))
+        await fs.writeFile(contactsPath, newContactList, 'utf8')
+        const data = await getAll();
+        console.table(data)
     } catch (error) {
         console.log(error)
     }
@@ -48,9 +49,9 @@ async function addContact(name, email, phone) {
     try {
         const contacts = await getAll()
         contacts.push(newContact)
-        const newData = JSON.stringify(contacts)
-        await fs.writeFile(contactsPath, newData)
-        console.log(newData)
+        const newContactList = JSON.stringify(contacts)
+        await fs.writeFile(contactsPath, newContactList)
+        console.table(contacts)
     } catch (error) {
         console.log(error)
     }
@@ -60,5 +61,5 @@ module.exports = {
     listContacts,
     getContactById,
     removeContact,
-    addContact,
+    addContact
 }
